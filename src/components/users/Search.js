@@ -1,8 +1,15 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 export class Search extends Component {
   state = {
     text: "",
+  };
+  // propTypes for making sure that data is being passed correctly and receive it correctly as well.
+  static propTypes = {
+    searchUsers: PropTypes.func.isRequired,
+    clearUsers: PropTypes.func.isRequired,
+    showClear: PropTypes.bool.isRequired,
   };
 
   //onSubmit function
@@ -20,7 +27,10 @@ export class Search extends Component {
     this.setState({ [e.target.name]: e.target.value });
 
   render() {
+    //destructuring showClear and clearUsers = this.props
+    const { showClear, clearUsers } = this.props;
     return (
+      // onSubmit is passed to the onSubmit function
       <div>
         <form onSubmit={this.onSubmit} className="form">
           <input
@@ -37,6 +47,15 @@ export class Search extends Component {
             className="btn btn-dark btn-block"
           />
         </form>
+
+        {
+          // wrap our button with a expression saying :  && (true) then show the button
+          showClear && (
+            <button className="btn btn-block btn-block" onClick={clearUsers}>
+              Clear
+            </button>
+          )
+        }
       </div>
     );
   }
