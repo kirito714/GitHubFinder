@@ -10,16 +10,22 @@ export class Search extends Component {
     searchUsers: PropTypes.func.isRequired,
     clearUsers: PropTypes.func.isRequired,
     showClear: PropTypes.bool.isRequired,
+    setAlert: PropTypes.func.isRequired,
   };
 
   //onSubmit function
   onSubmit = (e) => {
     // prevents the browser from refreshing
     e.preventDefault();
-    // searchUsers is being passed as props to our API
-    this.props.searchUsers(this.state.text);
-    // setState to empty string   on submit is other words clears the search field.
-    this.setState({ text: "" });
+    // if statement to alert user when search input was submitted with a empty string ''s
+    if (this.state.text === "") {
+      this.props.setAlert("Please Enter something", "light");
+    } else {
+      // searchUsers is being passed as props to our API
+      this.props.searchUsers(this.state.text);
+      // setState to empty string   on submit is other words clears the search field.
+      this.setState({ text: "" });
+    }
   };
   // onChange is used to update the state
   onChange = (e) =>
