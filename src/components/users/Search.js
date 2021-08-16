@@ -1,70 +1,65 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-export class Search extends Component {
-  state = {
-    text: "",
-  };
-  // propTypes for making sure that data is being passed correctly and receive it correctly as well.
-  static propTypes = {
-    searchUsers: PropTypes.func.isRequired,
-    clearUsers: PropTypes.func.isRequired,
-    showClear: PropTypes.bool.isRequired,
-    setAlert: PropTypes.func.isRequired,
-  };
+//destructuring showClear and clearUsers from props
+const Search = ({ searchUsers, showClear, clearUsers, setAlert }) => {
+  const [text, setText] = useState(" ");
 
   //onSubmit function
-  onSubmit = (e) => {
+  const onSubmit = (e) => {
     // prevents the browser from refreshing
     e.preventDefault();
     // if statement to alert user when search input was submitted with a empty string ''s
-    if (this.state.text === "") {
-      this.props.setAlert("Please Enter something", "light");
+    if (text === "") {
+      setAlert("Please Enter something", "light");
     } else {
       // searchUsers is being passed as props to our API
-      this.props.searchUsers(this.state.text);
+      searchUsers(text);
       // setState to empty string   on submit is other words clears the search field.
-      this.setState({ text: "" });
+      setText(" ");
     }
   };
   // onChange is used to update the state
-  onChange = (e) =>
+  const onChange = (e) =>
     // set states by e.target value "Text in this case since we have only one input field"
-    this.setState({ [e.target.name]: e.target.value });
+    setText(e.target.value);
 
-  render() {
-    //destructuring showClear and clearUsers = this.props
-    const { showClear, clearUsers } = this.props;
-    return (
-      // onSubmit is passed to the onSubmit function
-      <div>
-        <form onSubmit={this.onSubmit} className="form">
-          <input
-            type="text"
-            name="text"
-            placeholder="Search Users..."
-            // value this.state.text is for updating the state
-            value={this.state.text}
-            onChange={this.onChange}
-          />
-          <input
-            type="submit"
-            value="Search"
-            className="btn btn-dark btn-block"
-          />
-        </form>
+  return (
+    // onSubmit is passed to the onSubmit function
+    <div>
+      <form onSubmit={onSubmit} className="form">
+        <input
+          type="text"
+          name="text"
+          placeholder="Search Users..."
+          // value this.state.text is for updating the state
+          value={text}
+          onChange={onChange}
+        />
+        <input
+          type="submit"
+          value="Search"
+          className="btn btn-dark btn-block"
+        />
+      </form>
 
-        {
-          // wrap our button with a expression saying :  && (true) then show the button
-          showClear && (
-            <button className="btn btn-block btn-block" onClick={clearUsers}>
-              Clear
-            </button>
-          )
-        }
-      </div>
-    );
-  }
-}
+      {
+        // wrap our button with a expression saying :  && (true) then show the button
+        showClear && (
+          <button className="btn btn-block btn-block" onClick={clearUsers}>
+            Clear
+          </button>
+        )
+      }
+    </div>
+  );
+};
+// propTypes for making sure that data is being passed correctly and receive it correctly as well.
+Search.propTypes = {
+  searchUsers: PropTypes.func.isRequired,
+  clearUsers: PropTypes.func.isRequired,
+  showClear: PropTypes.bool.isRequired,
+  setAlert: PropTypes.func.isRequired,
+};
 
 export default Search;
