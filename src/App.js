@@ -1,5 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import GithubState from "./context/github/GithubState";
 import "./App.css";
 import NavBar from "./components/layout/NavBar";
 import Alert from "./components/layout/Alert";
@@ -59,7 +60,7 @@ const App = () => {
 
   //clear users from state
   const clearUsers = () => {
-    setUser([]);
+    setUsers([]);
     setLoading(false);
   };
   // set alert by pushing it into the state
@@ -67,56 +68,58 @@ const App = () => {
   const showAlert = (msg, type) => {
     setAlert({ msg, type });
 
-    setTimeout(() => showAlert(null), 2000);
+    setTimeout(() => setAlert(null), 2000);
   };
 
   // const is for destructuring
 
   return (
-    <Router>
-      <div className="App">
-        <NavBar />
-        <div className="container">
-          <Alert alert={alert} />
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={(props) => (
-                <Fragment>
-                  <Search
-                    searchUsers={searchUsers}
-                    clearUsers={clearUsers}
-                    // gets length of users and if greater then 0 then true or else make it false'
-                    showClear={users.length > 0 ? true : false}
-                    setAlert={showAlert}
+    <GithubState>
+      <Router>
+        <div className="App">
+          <NavBar />
+          <div className="container">
+            <Alert alert={alert} />
+            <Switch>
+              <Route
+                exact
+                path="/"
+                render={(props) => (
+                  <Fragment>
+                    <Search
+                      searchUsers={searchUsers}
+                      clearUsers={clearUsers}
+                      // gets length of users and if greater then 0 then true or else make it false'
+                      showClear={users.length > 0 ? true : false}
+                      showAlert={showAlert}
+                    />
+                    <Users loading={loading} users={users} />
+                  </Fragment>
+                )}
+              />
+              <Route exact path="/about" component={About} />
+              <Route
+                // path /user/:login to be filled with the user
+                exact
+                path="/user/:login"
+                render={(props) => (
+                  // render, spread the props then calls the getUser function to run the get request on user and fill the user object with data.
+                  <User
+                    {...props}
+                    getUser={getUser}
+                    getUserRepos={getUserRepos}
+                    user={user}
+                    repos={repos}
+                    // loading being called from Users
+                    loading={loading}
                   />
-                  <Users loading={loading} users={users} />
-                </Fragment>
-              )}
-            />
-            <Route exact path="/about" component={About} />
-            <Route
-              // path /user/:login to be filled with the user
-              exact
-              path="/user/:login"
-              render={(props) => (
-                // render, spread the props then calls the getUser function to run the get request on user and fill the user object with data.
-                <User
-                  {...props}
-                  getUser={getUser}
-                  getUserRepos={getUserRepos}
-                  user={user}
-                  repos={repos}
-                  // loading being called from Users
-                  loading={loading}
-                />
-              )}
-            />
-          </Switch>
+                )}
+              />
+            </Switch>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </GithubState>
   );
 };
 

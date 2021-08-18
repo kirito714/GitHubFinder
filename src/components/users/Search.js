@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 //destructuring showClear and clearUsers from props
-const Search = ({ searchUsers, showClear, clearUsers, setAlert }) => {
-  const [text, setText] = useState(" ");
+const Search = ({ searchUsers, showClear, clearUsers, showAlert }) => {
+  const [text, setText] = useState("");
 
   //onSubmit function
   const onSubmit = (e) => {
@@ -11,7 +11,7 @@ const Search = ({ searchUsers, showClear, clearUsers, setAlert }) => {
     e.preventDefault();
     // if statement to alert user when search input was submitted with a empty string ''s
     if (text === "") {
-      setAlert("Please Enter something", "light");
+      showAlert("Please Enter something", "light");
     } else {
       // searchUsers is being passed as props to our API
       searchUsers(text);
@@ -59,7 +59,7 @@ Search.propTypes = {
   searchUsers: PropTypes.func.isRequired,
   clearUsers: PropTypes.func.isRequired,
   showClear: PropTypes.bool.isRequired,
-  setAlert: PropTypes.func.isRequired,
+  showAlert: PropTypes.func.isRequired,
 };
 
 export default Search;
