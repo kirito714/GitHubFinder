@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import GithubState from "./context/github/GithubState";
 import AlertState from "./context/alert/AlertState";
@@ -7,6 +7,7 @@ import NavBar from "./components/layout/NavBar";
 import Alert from "./components/layout/Alert";
 import Home from "./components/pages/Home";
 import User from "./components/users/User";
+import NotFound from "./components/pages/NotFound";
 
 import About from "./components/pages/About";
 
@@ -28,6 +29,7 @@ const App = () => {
                   path="/user/:login"
                   component={User}
                 />
+                <Route component={NotFound} />
               </Switch>
             </div>
           </div>

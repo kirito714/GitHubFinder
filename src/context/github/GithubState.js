@@ -10,6 +10,19 @@ import {
   CLEAR_USERS,
 } from "../types";
 
+// sets up Variables for client and secret
+let githubClientID;
+let githubClientSecret;
+// if statement to check if not reactApp
+if (process.env.NODE_ENV !== "production") {
+  githubClientID = process.env.REACT_APP_GITHUB_CLIENT_ID;
+  githubClientSecret = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
+} else {
+  //else look for GITHUB_CLIENT_ID/GITHUB_CLIENT_SECRET
+  githubClientID = process.env.GITHUB_CLIENT_ID;
+  githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+}
+
 const GithubState = (props) => {
   const initialState = {
     users: [],
@@ -25,7 +38,7 @@ const GithubState = (props) => {
     // lading true gives us that spinnerGif when loading items.
     setLoading(true);
     const res = await axios.get(
-      `https://api.github.com/search/users?q=${text}&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/search/users?q=${text}&client_id=${githubClientID}&client_secret=${githubClientSecret}`
     );
 
     // users: res.data.items gives us our users from our api request.
@@ -41,7 +54,7 @@ const GithubState = (props) => {
     // lading true gives us that spinnerGif when loading items.
     setLoading(true);
     const res = await axios.get(
-      `https://api.github.com/users/${username}?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/users/${username}?client_id=${githubClientID}&client_secret=${githubClientSecret}`
     );
     // users: res.data gives us our single user from our api request.
     dispatch({
@@ -54,7 +67,7 @@ const GithubState = (props) => {
     // lading true gives us that spinnerGif when loading items.
     setLoading(true);
     const res = await axios.get(
-      `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${githubClientID}&client_secret=${githubClientSecret}`
     );
 
     // users: res.data gives us our single user from our api request
