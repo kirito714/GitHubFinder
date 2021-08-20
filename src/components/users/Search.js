@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
+import GithubContext from "../../context/github/githubContext";
 
 //destructuring showClear and clearUsers from props
-const Search = ({ searchUsers, showClear, clearUsers, showAlert }) => {
+const Search = ({ showAlert }) => {
+  const githubContext = useContext(GithubContext);
   const [text, setText] = useState("");
 
   //onSubmit function
@@ -14,7 +16,7 @@ const Search = ({ searchUsers, showClear, clearUsers, showAlert }) => {
       showAlert("Please Enter something", "light");
     } else {
       // searchUsers is being passed as props to our API
-      searchUsers(text);
+      githubContext.searchUsers(text);
       // setState to empty string   on submit is other words clears the search field.
       setText(" ");
     }
@@ -45,8 +47,11 @@ const Search = ({ searchUsers, showClear, clearUsers, showAlert }) => {
 
       {
         // wrap our button with a expression saying :  && (true) then show the button
-        showClear && (
-          <button className="btn btn-block btn-block" onClick={clearUsers}>
+        githubContext.users.length > 0 && (
+          <button
+            className="btn btn-block btn-block"
+            onClick={githubContext.clearUsers}
+          >
             Clear
           </button>
         )
@@ -56,9 +61,6 @@ const Search = ({ searchUsers, showClear, clearUsers, showAlert }) => {
 };
 // propTypes for making sure that data is being passed correctly and receive it correctly as well.
 Search.propTypes = {
-  searchUsers: PropTypes.func.isRequired,
-  clearUsers: PropTypes.func.isRequired,
-  showClear: PropTypes.bool.isRequired,
   showAlert: PropTypes.func.isRequired,
 };
 
