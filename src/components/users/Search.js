@@ -1,10 +1,11 @@
 import React, { useState, useContext } from "react";
-import PropTypes from "prop-types";
+import AlertContext from "../../context/alert/alertContext";
 import GithubContext from "../../context/github/githubContext";
 
 //destructuring showClear and clearUsers from props
-const Search = ({ showAlert }) => {
+const Search = () => {
   const githubContext = useContext(GithubContext);
+  const alertContext = useContext(AlertContext);
   const [text, setText] = useState("");
 
   //onSubmit function
@@ -13,7 +14,7 @@ const Search = ({ showAlert }) => {
     e.preventDefault();
     // if statement to alert user when search input was submitted with a empty string ''s
     if (text === "") {
-      showAlert("Please Enter something", "light");
+      alertContext.setAlert("Please Enter something", "light");
     } else {
       // searchUsers is being passed as props to our API
       githubContext.searchUsers(text);
@@ -58,10 +59,6 @@ const Search = ({ showAlert }) => {
       }
     </div>
   );
-};
-// propTypes for making sure that data is being passed correctly and receive it correctly as well.
-Search.propTypes = {
-  showAlert: PropTypes.func.isRequired,
 };
 
 export default Search;
